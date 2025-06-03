@@ -10,7 +10,7 @@ from sklearn.model_selection import GridSearchCV
 
 def load_data():
     """
-    Load data for gridsearch
+    load data for gridsearch
     """
     X_train = pd.read_csv('data/processed_data/X_train_scaled.csv')
     X_test = pd.read_csv('data/processed_data/X_test_scaled.csv')
@@ -30,6 +30,8 @@ def run_gridsearch(X_train, y_train):
         n_jobs=-1,
         verbosity=0
     )
+    
+    #define param for gridsearch
     param_grid_xgb = {
             "n_estimators":  [50, 100, 150, 200, 250],
             "max_depth":     [3, 5, 7, 9],
@@ -46,27 +48,30 @@ def run_gridsearch(X_train, y_train):
     )
     grid_xgb.fit(X_train, y_train)
     return grid_xgb
+
 def save_params(best_params: dict, filepath="models/best_params.pkl"):
     """
-    Speichert das Dictionary best_params als Pickle in filepath.
+    save best params in .pkl-file
     """
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, "wb") as f:
         pickle.dump(best_params, f)
-    print(f"➜ Parameter gespeichert unter: {filepath}")
+    print(f"➜ Best params save as: {filepath}")
+    
 def main():
-    # 0. Daten laden
+    # load data
     X_train, X_test, y_train, y_test = load_data()
-    # 1. GridSearchCV ausführen
-    print("▶ Starte GridSearchCV auf XGBRegressor …")
+    # run gridsearch
+   
     grid = run_gridsearch(X_train, y_train)
-    print("✅ GridSearch abgeschlossen.")
-    # 2. Beste Parameter ausgeben
+
+    # print best params
     best_params = grid.best_params_
     best_score_cv = grid.best_score_
-    print(f"Beste XGBoost-Parameter: {best_params}")
-    print(f"Bestes CV-R²-Score: {best_score_cv:.4f}")
-    # 3. Parameter speichern (ohne Versionierung)
+    print(f"best XGBoost-params: {best_params}")
+    print(f"best R²-Score: {best_score_cv:.4f}")
+    # save best params as .pkl
     save_params(best_params, filepath="models/best_params.pkl")
+    
 if __name__ == "__main__":
     main()

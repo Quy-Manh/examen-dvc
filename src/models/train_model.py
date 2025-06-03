@@ -50,7 +50,7 @@ def run_save_model(X_train, y_train):
 def main():
     # load data
     X_train, X_test, y_train, y_test = load_data()
-   
+    # run and save model
     run_save_model(X_train, y_train)
 
 if __name__ == "__main__":
