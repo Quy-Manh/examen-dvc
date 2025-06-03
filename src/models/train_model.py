@@ -8,7 +8,7 @@ from xgboost import XGBRegressor
 
 def load_data():
     """
-    load data for gridsearch
+    load data 
     """
     X_train = pd.read_csv('data/processed_data/X_train.csv')
     X_test  = pd.read_csv('data/processed_data/X_test.csv')
@@ -46,3 +46,12 @@ def run_save_model(X_train, y_train):
     os.makedirs(os.path.dirname(model_filename), exist_ok=True)
     joblib.dump(xgb_model, model_filename)
     print(f"XGBoost model saved as: {model_filename}")
+
+def main():
+    # load data
+    X_train, X_test, y_train, y_test = load_data()
+   
+    run_save_model(X_train, y_train)
+
+if __name__ == "__main__":
+    main()
